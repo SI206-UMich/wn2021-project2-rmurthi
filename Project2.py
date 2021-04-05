@@ -92,7 +92,43 @@ def summarize_best_books(filepath):
     filepath and return a list of (category, book title, URL) tuples.
     
     """
-    pass
+    with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), filepath), 'r', encoding="utf8") as f:
+        fyle = f.read()
+    soup = BeautifulSoup(fyle, 'html.parser')
+
+    lst = []
+    lst2 = soup.find_all('h4')
+    
+    for x in lst2:
+        lst.append(x.text.strip())
+
+    lst3 = []
+    lst4 = soup.find_all('div', class_='category__winnerImageContainer') 
+    for x in lst4:
+        title = x.find('img')['alt']
+        lst3.append(title)
+    
+    lst5 = []
+    # lst6 = soup.find_all('a', href=True)
+    # for a in lst6:
+    #     if a.text:
+    #         a = a.get('href')
+    #         url = lst6[a]
+    #         if url.find("https://www.goodreads.com/") >= 0:
+    #             print(url)
+
+
+    lst6 = soup.find_all('div', class_='category clearFix')
+    lst7 = []
+    for x in lst6:
+        y = x.find('a')['href']
+        lst5.append(y)
+
+ 
+    for x, y, z in zip(lst, lst3, lst5):
+        tupl = (x, y, z)
+        lst7.append(tupl)
+    return lst7
 
 
 def write_csv(data, filename):
